@@ -13,14 +13,34 @@ export const metadata: Metadata = {
   },
   description:
     "StruwwelTV – Livestreams, Warzone, Clips, Community und jede Menge kontrolliertes Chaos.",
+  alternates: {
+    canonical: "https://struwweltv.de",
+  },
   openGraph: {
-    title: "StruwwelTV",
-    description: "Chaos. Kugeln. Community.",
+    title: "StruwwelTV – Chaos. Kugeln. Community.",
+    description: "Livestreams, Warzone, Clips, Community und jede Menge kontrolliertes Chaos.",
     url: "https://struwweltv.de",
     siteName: "StruwwelTV",
-    images: ["/logo.png"],
+    images: [
+      {
+        url: "/logo.png",
+        width: 1000,
+        height: 1000,
+        alt: "StruwwelTV Logo",
+      },
+    ],
     locale: "de_DE",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "StruwwelTV – Chaos. Kugeln. Community.",
+    description: "Livestreams, Warzone, Clips, Community und jede Menge kontrolliertes Chaos.",
+    images: ["/logo.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
   icons: { icon: "/logo.png", apple: "/logo.png" },
 };
