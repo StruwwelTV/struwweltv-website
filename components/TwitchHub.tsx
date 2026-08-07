@@ -34,10 +34,11 @@ function elapsed(startedAt?: string) {
 export function TwitchHub() {
   const [data, setData] = useState<TwitchData | null>(null);
   const [error, setError] = useState(false);
-  const [host, setHost] = useState("struwweltv.de");
+  const [host, setHost] = useState<string | null>(null);
 
   useEffect(() => {
-    setHost(window.location.hostname || "struwweltv.de");
+    setHost(window.location.hostname);
+
     let active = true;
     fetch("/api/twitch", { cache: "no-store" })
       .then(async (res) => {
@@ -46,10 +47,14 @@ export function TwitchHub() {
       })
       .then((json) => active && setData(json))
       .catch(() => active && setError(true));
-    return () => { active = false; };
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   const playerSrc = useMemo(() => {
+    if (!host) return null;
     const parent = encodeURIComponent(host);
     return `https://player.twitch.tv/?channel=struwweltv&parent=${parent}&muted=true`;
   }, [host]);
@@ -58,8 +63,19 @@ export function TwitchHub() {
     <>
       <div className="twitch-layout">
         <div className="player-card">
-          <iframe src={playerSrc} title="StruwwelTV Twitch Stream" allowFullScreen />
+          {playerSrc ? (
+            <iframe
+              key={playerSrc}
+              src={playerSrc}
+              title="StruwwelTV Twitch Stream"
+              allowFullScreen
+              allow="autoplay; fullscreen"
+            />
+          ) : (
+            <div className="player-loading">Twitch-Player wird geladen …</div>
+          )}
         </div>
+
         <aside className="stream-info card">
           <p className="kicker">{data?.live ? "JETZT LIVE" : "TWITCH STATUS"}</p>
           <h3>{data?.stream?.title || (error ? "Twitch gerade nicht erreichbar" : "Der nächste Drop kommt bestimmt.")}</h3>
