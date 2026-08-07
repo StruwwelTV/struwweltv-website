@@ -13,6 +13,17 @@ const schedule = [
   ["SO", "Variabel", "Special Stream"],
 ];
 
+const hardware = [
+  { icon: "◈", label: "Mainboard", value: "MSI X670E Gaming Plus WiFi" },
+  { icon: "CPU", label: "Prozessor", value: "AMD Ryzen 7 7800X3D" },
+  { icon: "GPU", label: "Grafikkarte", value: "MSI GeForce RTX 4070 Ti SUPER Ventus 2X OC Active", featured: true },
+  { icon: "RAM", label: "Arbeitsspeicher", value: "Corsair Vengeance RGB · 32 GB (2×16 GB)" },
+  { icon: "360", label: "Kühlung", value: "MSI MAG CoreLiquid E360 All-in-One" },
+  { icon: "850", label: "Netzteil", value: "be quiet! Pure Power 12 M · 850 W · 80+ Gold" },
+  { icon: "SSD", label: "Speicher", value: "500 GB SSD · 1 TB SSD · 1 TB HDD" },
+  { icon: "CASE", label: "Gehäuse", value: "LC-Power Gaming 809B Dark Storm X · Midi Tower" },
+];
+
 export default function Home() {
   return (
     <main>
@@ -25,6 +36,7 @@ export default function Home() {
           <Link href="#live">Live</Link>
           <Link href="#clips">Clips</Link>
           <Link href="#about">Über mich</Link>
+          <Link href="#setup">Setup</Link>
           <Link href="#schedule">Streamplan</Link>
           <Link href="#community">Community</Link>
         </nav>
@@ -90,6 +102,35 @@ export default function Home() {
           <p>Warzone, spontane Challenges und ehrliche Reaktionen treffen auf schwarzen Humor, ohne den Respekt füreinander zu verlieren.</p>
           <blockquote>„Chaos. Kugeln. Community.“</blockquote>
         </article>
+      </section>
+
+      <section className="section" id="setup">
+        <div className="section-head setup-head">
+          <div>
+            <p className="kicker">UNTER DER HAUBE</p>
+            <h2>Mein Setup.</h2>
+          </div>
+          <p>Kein RGB macht mehr FPS. Aber wenn schon verlieren, dann wenigstens mit vernünftiger Hardware.</p>
+        </div>
+        <div className="hardware-grid">
+          {hardware.map((item) => (
+            <article className={`hardware-card card ${item.featured ? "featured" : ""}`} key={item.label}>
+              <div className="hardware-icon">{item.icon}</div>
+              <div>
+                <span>{item.label}</span>
+                <h3>{item.value}</h3>
+              </div>
+            </article>
+          ))}
+        </div>
+        <div className="setup-strip card">
+          <span>THE BUILD</span>
+          <strong>7800X3D</strong>
+          <i>×</i>
+          <strong>RTX 4070 Ti SUPER</strong>
+          <i>×</i>
+          <strong>32 GB DDR5</strong>
+        </div>
       </section>
 
       <section className="section" id="schedule">
