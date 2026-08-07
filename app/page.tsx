@@ -24,6 +24,8 @@ const hardware = [
   { icon: "CASE", label: "Gehäuse", value: "LC-Power Gaming 809B Dark Storm X · Midi Tower" },
 ];
 
+const portraitSrc = "/creator.jpg?v=9899e854";
+
 export default function Home() {
   return (
     <main>
@@ -74,7 +76,7 @@ export default function Home() {
           <div className="portrait-orbit" />
           <div className="portrait-logo"><Image src="/logo.png" width={112} height={112} alt="STV" priority /></div>
           <div className="portrait-frame">
-            <Image src="/creator.jpg" fill sizes="(max-width: 900px) 90vw, 42vw" alt="Bastian alias StruwwelTV" className="portrait-image" priority />
+            <img src={portraitSrc} alt="Bastian alias StruwwelTV" className="portrait-image raw-portrait" />
             <div className="portrait-shade" />
           </div>
           <div className="floating-tag tag-top"><span>STATUS</span><b>CONNECTED</b></div>
@@ -93,7 +95,7 @@ export default function Home() {
 
       <section className="section about-grid" id="about">
         <div className="about-image card">
-          <Image src="/creator.jpg" fill sizes="(max-width: 900px) 100vw, 42vw" alt="Bastian alias StruwwelTV" className="about-photo" />
+          <img src={portraitSrc} alt="Bastian alias StruwwelTV" className="about-photo raw-about-photo" />
         </div>
         <article className="about-copy card">
           <p className="kicker">HINTER DEM LOGO</p>
