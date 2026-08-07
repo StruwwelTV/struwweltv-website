@@ -42,6 +42,7 @@ function clipDate(value?: string) {
 export function TwitchHub() {
   const [data, setData] = useState<TwitchData | null>(null);
   const [error, setError] = useState(false);
+  const [selectedClip, setSelectedClip] = useState<Clip | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -55,7 +56,24 @@ export function TwitchHub() {
     return () => { active = false; };
   }, []);
 
+  useEffect(() => {
+    if (!selectedClip) return;
+    const oldOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSelectedClip(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = oldOverflow;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [selectedClip]);
+
   const clips = data?.clips?.slice(0, 3) ?? [];
+  const clipEmbedUrl = selectedClip && typeof window !== "undefined"
+    ? `https://clips.twitch.tv/embed?clip=${encodeURIComponent(selectedClip.id)}&parent=${encodeURIComponent(window.location.hostname)}&autoplay=true`
+    : "";
 
   return (
     <>
@@ -113,23 +131,50 @@ export function TwitchHub() {
           {error && <div className={styles.empty}>Die Clips konnten gerade nicht geladen werden.</div>}
           {data && clips.length === 0 && <div className={styles.empty}>Noch keine Clips gefunden. Auf Twitch gibt es trotzdem genug Chaos zu entdecken.</div>}
           {clips.map((clip, index) => (
-            <a className={`${styles.clipCard} ${index === 0 ? styles.featuredClip : ""}`} href={clip.url} target="_blank" rel="noreferrer" key={clip.id}>
+            <button type="button" className={`${styles.clipCard} ${index === 0 ? styles.featuredClip : ""}`} onClick={() => setSelectedClip(clip)} key={clip.id} aria-label={`${clip.title} direkt auf StruwwelTV abspielen`}>
               <div className={styles.thumb}>
                 <img src={clip.thumbnailUrl} alt={`Twitch Clip: ${clip.title}`} loading="lazy" />
                 <div className={styles.thumbShade} />
                 <span className={styles.clipNumber}>0{index + 1}</span>
                 <span className={styles.play}>▶</span>
-                <span className={styles.watchLabel}>Clip ansehen ↗</span>
+                <span className={styles.watchLabel}>Hier abspielen</span>
               </div>
               <div className={styles.cardBody}>
                 <div className={styles.meta}><span>{clipDate(clip.createdAt)}</span><span>{clip.viewCount.toLocaleString("de-DE")} Views</span></div>
                 <h4 className={styles.title}>{clip.title}</h4>
                 <div className={styles.cardFooter}><span>TWITCH</span><span>{Math.round(clip.duration)} Sek.</span></div>
               </div>
-            </a>
+            </button>
           ))}
         </div>
       </section>
+
+      {selectedClip && (
+        <div className={styles.modalBackdrop} role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setSelectedClip(null); }}>
+          <div className={styles.modal} role="dialog" aria-modal="true" aria-label={`Twitch Clip: ${selectedClip.title}`}>
+            <div className={styles.modalTopbar}>
+              <div>
+                <span>STRUWWELTV // CLIP</span>
+                <strong>{selectedClip.title}</strong>
+              </div>
+              <button type="button" className={styles.closeButton} onClick={() => setSelectedClip(null)} aria-label="Clip schließen">×</button>
+            </div>
+            <div className={styles.embedWrap}>
+              <iframe
+                src={clipEmbedUrl}
+                title={selectedClip.title}
+                allow="autoplay; fullscreen"
+                allowFullScreen
+                frameBorder="0"
+              />
+            </div>
+            <div className={styles.modalFooter}>
+              <span>{selectedClip.viewCount.toLocaleString("de-DE")} Views · {Math.round(selectedClip.duration)} Sek.</span>
+              <a href={selectedClip.url} target="_blank" rel="noreferrer">Auf Twitch öffnen ↗</a>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
