@@ -49,10 +49,39 @@ export default function Home() {
           <div className="hero-actions"><a className="btn btn-primary" href="https://www.twitch.tv/struwwelTV" target="_blank" rel="noreferrer">Jetzt auf Twitch</a><a className="btn btn-secondary" href="https://discord.gg/YZDB59vdV7" target="_blank" rel="noreferrer">Discord beitreten</a></div>
           <div className="hero-facts"><div><strong>LIVE</strong><span>Warzone & mehr</span></div><div><strong>18+</strong><span>Humor mit Schäden</span></div><div><strong>100%</strong><span>Community</span></div></div>
         </div>
-        <div className="hero-portrait" aria-label="Portrait von Bastian alias StruwwelTV">
-          <div className="portrait-orbit" /><div className="portrait-logo"><Image src="/logo.png" width={112} height={112} alt="STV" priority /></div>
-          <div className="portrait-frame"><img src={portraitSrc} alt="Bastian alias StruwwelTV" className="portrait-image" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 36%" }} /><div className="portrait-shade" /></div>
-          <div className="floating-tag tag-top"><span>STATUS</span><b>CONNECTED</b></div><div className="floating-tag tag-bottom"><span>MODE</span><b>CHAOS</b></div>
+
+        <div className="hero-portrait" aria-label="StruwwelTV Logo">
+          <div className="portrait-orbit" />
+          <div
+            style={{
+              position: "relative",
+              width: "min(43vw, 610px)",
+              aspectRatio: "1 / 1",
+              display: "grid",
+              placeItems: "center",
+              borderRadius: "50%",
+              zIndex: 2,
+              background: "radial-gradient(circle, rgba(61,214,208,.12) 0%, rgba(61,214,208,.035) 48%, transparent 70%)",
+              filter: "drop-shadow(0 0 46px rgba(61,214,208,.28))",
+            }}
+          >
+            <Image
+              src="/logo.png"
+              width={610}
+              height={610}
+              alt="STV – StruwwelTV"
+              priority
+              style={{
+                width: "92%",
+                height: "92%",
+                objectFit: "contain",
+                borderRadius: "50%",
+                filter: "drop-shadow(0 0 24px rgba(61,214,208,.35))",
+              }}
+            />
+          </div>
+          <div className="floating-tag tag-top"><span>STATUS</span><b>CONNECTED</b></div>
+          <div className="floating-tag tag-bottom"><span>MODE</span><b>CHAOS</b></div>
         </div>
       </section>
 
