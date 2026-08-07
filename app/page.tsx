@@ -76,7 +76,12 @@ export default function Home() {
           <div className="portrait-orbit" />
           <div className="portrait-logo"><Image src="/logo.png" width={112} height={112} alt="STV" priority /></div>
           <div className="portrait-frame">
-            <img src={portraitSrc} alt="Bastian alias StruwwelTV" className="portrait-image raw-portrait" />
+            <img
+              src={portraitSrc}
+              alt="Bastian alias StruwwelTV"
+              className="portrait-image"
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 36%" }}
+            />
             <div className="portrait-shade" />
           </div>
           <div className="floating-tag tag-top"><span>STATUS</span><b>CONNECTED</b></div>
@@ -95,7 +100,12 @@ export default function Home() {
 
       <section className="section about-grid" id="about">
         <div className="about-image card">
-          <img src={portraitSrc} alt="Bastian alias StruwwelTV" className="about-photo raw-about-photo" />
+          <img
+            src={portraitSrc}
+            alt="Bastian alias StruwwelTV"
+            className="about-photo"
+            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 35%" }}
+          />
         </div>
         <article className="about-copy card">
           <p className="kicker">HINTER DEM LOGO</p>
