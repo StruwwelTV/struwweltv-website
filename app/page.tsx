@@ -2,16 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { LiveBadge } from "@/components/LiveBadge";
 import { TwitchHub } from "@/components/TwitchHub";
-
-const schedule = [
-  ["MO", "Offline", "Regeneration"],
-  ["DI", "19:00", "Warzone"],
-  ["MI", "Offline", "Clips & Pause"],
-  ["DO", "19:00", "Warzone"],
-  ["FR", "19:00", "Open End"],
-  ["SA", "Variabel", "Community / Event"],
-  ["SO", "Variabel", "Special Stream"],
-];
+import { StreamSchedule } from "@/components/StreamSchedule";
 
 const hardware = [
   { icon: "◈", label: "Mainboard", value: "MSI X670E Gaming Plus WiFi" },
@@ -52,33 +43,8 @@ export default function Home() {
 
         <div className="hero-portrait" aria-label="StruwwelTV Logo">
           <div className="portrait-orbit" />
-          <div
-            style={{
-              position: "relative",
-              width: "min(43vw, 610px)",
-              aspectRatio: "1 / 1",
-              display: "grid",
-              placeItems: "center",
-              borderRadius: "50%",
-              zIndex: 2,
-              background: "radial-gradient(circle, rgba(61,214,208,.12) 0%, rgba(61,214,208,.035) 48%, transparent 70%)",
-              filter: "drop-shadow(0 0 46px rgba(61,214,208,.28))",
-            }}
-          >
-            <Image
-              src="/logo.png"
-              width={610}
-              height={610}
-              alt="STV – StruwwelTV"
-              priority
-              style={{
-                width: "92%",
-                height: "92%",
-                objectFit: "contain",
-                borderRadius: "50%",
-                filter: "drop-shadow(0 0 24px rgba(61,214,208,.35))",
-              }}
-            />
+          <div style={{ position: "relative", width: "min(43vw, 610px)", aspectRatio: "1 / 1", display: "grid", placeItems: "center", borderRadius: "50%", zIndex: 2, background: "radial-gradient(circle, rgba(61,214,208,.12) 0%, rgba(61,214,208,.035) 48%, transparent 70%)", filter: "drop-shadow(0 0 46px rgba(61,214,208,.28))" }}>
+            <Image src="/logo.png" width={610} height={610} alt="STV – StruwwelTV" priority style={{ width: "92%", height: "92%", objectFit: "contain", borderRadius: "50%", filter: "drop-shadow(0 0 24px rgba(61,214,208,.35))" }} />
           </div>
           <div className="floating-tag tag-top"><span>STATUS</span><b>CONNECTED</b></div>
           <div className="floating-tag tag-bottom"><span>MODE</span><b>CHAOS</b></div>
@@ -91,7 +57,7 @@ export default function Home() {
 
       <section className="section" id="setup"><div className="section-head setup-head"><div><p className="kicker">UNTER DER HAUBE</p><h2>Mein Setup.</h2></div><p>Kein RGB macht mehr FPS. Aber wenn schon verlieren, dann wenigstens mit vernünftiger Hardware.</p></div><div className="hardware-grid">{hardware.map((item) => (<article className={`hardware-card card ${item.featured ? "featured" : ""}`} key={item.label}><div className="hardware-icon">{item.icon}</div><div><span>{item.label}</span><h3>{item.value}</h3></div></article>))}</div><div className="setup-strip card"><span>THE BUILD</span><strong>7800X3D</strong><i>×</i><strong>RTX 4070 Ti SUPER</strong><i>×</i><strong>32 GB DDR5</strong></div></section>
 
-      <section className="section" id="schedule"><div className="section-head"><p className="kicker">STREAMPLAN</p><h2>Wann das Chaos beginnt.</h2></div><div className="schedule-grid">{schedule.map(([day, time, title]) => (<article className={`schedule-card ${time !== "Offline" ? "active" : ""}`} key={day}><span>{day}</span><strong>{time}</strong><small>{title}</small></article>))}</div></section>
+      <section className="section" id="schedule"><div className="section-head"><p className="kicker">STREAMPLAN</p><h2>Wann das Chaos beginnt.</h2><p>Der Plan erkennt automatisch den aktuellen Wochentag und zeigt dir, welcher Stream als Nächstes ansteht.</p></div><StreamSchedule /></section>
 
       <section className="section" id="community"><div className="community-card card"><div><p className="kicker">MEHR ALS NUR ZUSCHAUEN</p><h2>Werde Teil der Community.</h2><p>Mitspielen, Clips teilen, Memes abladen und bei Community-Events dabei sein. Wenn der Stream offline ist, geht es im Discord weiter.</p></div><div className="community-buttons"><a className="btn btn-primary" href="https://discord.gg/YZDB59vdV7" target="_blank" rel="noreferrer">Discord öffnen</a><a className="btn btn-secondary" href="https://instagram.com/struwweltv" target="_blank" rel="noreferrer">Instagram</a><a className="btn btn-secondary" href="https://youtube.com/struwwelTV" target="_blank" rel="noreferrer">YouTube</a></div></div></section>
 
