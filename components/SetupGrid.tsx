@@ -40,7 +40,7 @@ export function SetupGrid() {
           return item.href ? <a key={item.label} className={className} href={item.href} target="_blank" rel="noreferrer">{content}</a> : <article key={item.label} className={className}>{content}</article>;
         })}
       </div>
-      <p className={styles.note}>Produktlinks führen zu Geizhals Deutschland. Beim RAM führt der Link noch zur passenden Suche, bis die exakte Variante feststeht.</p>
+      <p className={styles.note}>Du willst wissen, was im Chaos steckt? Klick auf eine Komponente für weitere Details bei Geizhals.</p>
     </>
   );
 }
