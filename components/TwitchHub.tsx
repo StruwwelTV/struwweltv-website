@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { TwitchPlayer } from "@/components/TwitchPlayer";
+import styles from "@/components/TwitchHub.module.css";
 
 type Clip = {
   id: string;
@@ -10,6 +11,7 @@ type Clip = {
   thumbnailUrl: string;
   viewCount: number;
   duration: number;
+  createdAt?: string;
 };
 
 type TwitchData = {
@@ -32,6 +34,11 @@ function elapsed(startedAt?: string) {
   return `${hours}h ${minutes}m`;
 }
 
+function clipDate(value?: string) {
+  if (!value) return "TWITCH CLIP";
+  return new Intl.DateTimeFormat("de-DE", { day: "2-digit", month: "2-digit", year: "2-digit" }).format(new Date(value));
+}
+
 export function TwitchHub() {
   const [data, setData] = useState<TwitchData | null>(null);
   const [error, setError] = useState(false);
@@ -45,16 +52,37 @@ export function TwitchHub() {
       })
       .then((json) => active && setData(json))
       .catch(() => active && setError(true));
-    return () => {
-      active = false;
-    };
+    return () => { active = false; };
   }, []);
+
+  const clips = data?.clips?.slice(0, 3) ?? [];
 
   return (
     <>
       <div className="twitch-layout">
         <div className="player-card">
-          <TwitchPlayer />
+          {!data && !error && <div className="player-loading">Twitch-Status wird geladen …</div>}
+          {data?.live && <TwitchPlayer />}
+          {data && !data.live && (
+            <div className={styles.offlineCard}>
+              <div className={styles.offlineInner}>
+                <span className={styles.offlineEyebrow}>GERADE OFFLINE</span>
+                <h3 className={styles.offlineTitle}>Das Chaos macht kurz Pause.</h3>
+                <p className={styles.offlineText}>Kein kaputter Twitch-Frame mehr: Sobald Struwwel live geht, erscheint hier automatisch der Stream. Bis dahin warten Clips und der Kanal auf dich.</p>
+                <a className={styles.offlineButton} href="https://www.twitch.tv/struwwelTV" target="_blank" rel="noreferrer">Zum Twitch-Kanal ↗</a>
+              </div>
+            </div>
+          )}
+          {error && (
+            <div className={styles.offlineCard}>
+              <div className={styles.offlineInner}>
+                <span className={styles.offlineEyebrow}>TWITCH API</span>
+                <h3 className={styles.offlineTitle}>Kurz nicht erreichbar.</h3>
+                <p className={styles.offlineText}>Der Twitch-Status konnte gerade nicht geladen werden. Der Kanal selbst ist natürlich weiterhin erreichbar.</p>
+                <a className={styles.offlineButton} href="https://www.twitch.tv/struwwelTV" target="_blank" rel="noreferrer">Twitch öffnen ↗</a>
+              </div>
+            </div>
+          )}
         </div>
 
         <aside className="stream-info card">
@@ -75,17 +103,18 @@ export function TwitchHub() {
           <h3>Neueste Clips</h3>
           <a href="https://www.twitch.tv/struwweltv/videos?filter=clips" target="_blank" rel="noreferrer">Alle Clips ↗</a>
         </div>
-        <div className="clip-grid">
-          {!data && !error && <div className="loading">Twitch-Clips werden geladen …</div>}
-          {error && <div className="loading">Die Clips konnten gerade nicht geladen werden.</div>}
-          {data?.clips?.map((clip) => (
-            <a className="clip-card" href={clip.url} target="_blank" rel="noreferrer" key={clip.id}>
-              <div className="clip-thumb">
-                <img src={clip.thumbnailUrl} alt="" loading="lazy" />
-                <span className="clip-play">▶</span>
+        <div className={styles.clipGrid}>
+          {!data && !error && <div className={styles.empty}>Twitch-Clips werden geladen …</div>}
+          {error && <div className={styles.empty}>Die Clips konnten gerade nicht geladen werden.</div>}
+          {data && clips.length === 0 && <div className={styles.empty}>Noch keine Clips gefunden. Auf Twitch gibt es trotzdem genug Chaos zu entdecken.</div>}
+          {clips.map((clip) => (
+            <a className={styles.clipCard} href={clip.url} target="_blank" rel="noreferrer" key={clip.id}>
+              <div className={styles.thumb}>
+                <img src={clip.thumbnailUrl} alt={`Twitch Clip: ${clip.title}`} loading="lazy" />
+                <span className={styles.play}>▶</span>
               </div>
-              <div className="clip-stats"><span>TWITCH CLIP</span><span>{clip.viewCount.toLocaleString("de-DE")} Views</span></div>
-              <h4>{clip.title}</h4>
+              <div className={styles.meta}><span>{clipDate(clip.createdAt)}</span><span>{clip.viewCount.toLocaleString("de-DE")} Views</span></div>
+              <h4 className={styles.title}>{clip.title}</h4>
             </a>
           ))}
         </div>
