@@ -3,6 +3,26 @@ import { NextResponse } from "next/server";
 const TWITCH_TOKEN_URL = "https://id.twitch.tv/oauth2/token";
 const TWITCH_API = "https://api.twitch.tv/helix";
 
+type TwitchClip = {
+  id: string;
+  title: string;
+  url: string;
+  thumbnail_url: string;
+  creator_name: string;
+  view_count: number;
+  created_at: string;
+  duration: number;
+};
+
+type TwitchVideo = {
+  id: string;
+  title: string;
+  url: string;
+  duration: string;
+  created_at: string;
+  view_count: number;
+};
+
 async function helix(path: string, clientId: string, token: string) {
   const response = await fetch(`${TWITCH_API}${path}`, {
     headers: {
@@ -65,10 +85,10 @@ export async function GET() {
     ]);
 
     const stream = streamResult.data?.[0] || null;
-    const clips = [...(clipsResult.data || [])]
+    const clips = ([...(clipsResult.data || [])] as TwitchClip[])
       .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
       .slice(0, 6)
-      .map((clip) => ({
+      .map((clip: TwitchClip) => ({
         id: clip.id,
         title: clip.title,
         url: clip.url,
@@ -102,7 +122,7 @@ export async function GET() {
           }
         : null,
       clips,
-      videos: (videosResult.data || []).map((video) => ({
+      videos: ((videosResult.data || []) as TwitchVideo[]).map((video: TwitchVideo) => ({
         id: video.id,
         title: video.title,
         url: video.url,
