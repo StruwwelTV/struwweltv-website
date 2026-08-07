@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { TwitchPlayer } from "@/components/TwitchPlayer";
 
 type Clip = {
   id: string;
@@ -34,25 +35,8 @@ function elapsed(startedAt?: string) {
 export function TwitchHub() {
   const [data, setData] = useState<TwitchData | null>(null);
   const [error, setError] = useState(false);
-  const [playerSrc, setPlayerSrc] = useState<string | null>(null);
 
   useEffect(() => {
-    const currentHost = window.location.hostname;
-    const parents = Array.from(new Set([
-      currentHost,
-      "struwweltv.de",
-      "www.struwweltv.de",
-      "snazzy-centaur-9f611d.netlify.app",
-    ])).filter(Boolean);
-
-    const query = parents
-      .map((parent) => `parent=${encodeURIComponent(parent)}`)
-      .join("&");
-
-    setPlayerSrc(
-      `https://player.twitch.tv/?channel=struwweltv&${query}&muted=true&autoplay=false`,
-    );
-
     let active = true;
     fetch("/api/twitch", { cache: "no-store" })
       .then(async (res) => {
@@ -61,7 +45,6 @@ export function TwitchHub() {
       })
       .then((json) => active && setData(json))
       .catch(() => active && setError(true));
-
     return () => {
       active = false;
     };
@@ -71,18 +54,7 @@ export function TwitchHub() {
     <>
       <div className="twitch-layout">
         <div className="player-card">
-          {playerSrc ? (
-            <iframe
-              key={playerSrc}
-              src={playerSrc}
-              title="StruwwelTV Twitch Stream"
-              allowFullScreen
-              allow="autoplay; fullscreen; picture-in-picture"
-              referrerPolicy="strict-origin-when-cross-origin"
-            />
-          ) : (
-            <div className="player-loading">Twitch-Player wird geladen …</div>
-          )}
+          <TwitchPlayer />
         </div>
 
         <aside className="stream-info card">
