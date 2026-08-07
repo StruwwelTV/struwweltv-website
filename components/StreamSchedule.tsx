@@ -1,28 +1,10 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styles from "@/components/StreamSchedule.module.css";
+import { defaultSchedule, type ScheduleEntry } from "@/lib/scheduleData";
 
-type ScheduleEntry = {
-  key: number;
-  day: string;
-  label: string;
-  time: string;
-  title: string;
-  active: boolean;
-};
-
-const schedule: ScheduleEntry[] = [
-  { key: 1, day: "MO", label: "Montag", time: "Offline", title: "Regeneration", active: false },
-  { key: 2, day: "DI", label: "Dienstag", time: "19:00", title: "Warzone", active: true },
-  { key: 3, day: "MI", label: "Mittwoch", time: "Offline", title: "Clips & Pause", active: false },
-  { key: 4, day: "DO", label: "Donnerstag", time: "19:00", title: "Warzone", active: true },
-  { key: 5, day: "FR", label: "Freitag", time: "19:00", title: "Open End", active: true },
-  { key: 6, day: "SA", label: "Samstag", time: "Variabel", title: "Community / Event", active: true },
-  { key: 0, day: "SO", label: "Sonntag", time: "Variabel", title: "Special Stream", active: true },
-];
-
-function nextStreamIndex(today: number) {
+function nextStreamIndex(schedule: ScheduleEntry[], today: number) {
   for (let offset = 0; offset < 7; offset += 1) {
     const candidate = (today + offset) % 7;
     const index = schedule.findIndex((entry) => entry.key === candidate && entry.active);
@@ -32,8 +14,17 @@ function nextStreamIndex(today: number) {
 }
 
 export function StreamSchedule() {
+  const [schedule, setSchedule] = useState<ScheduleEntry[]>(defaultSchedule);
   const today = new Date().getDay();
-  const nextIndex = useMemo(() => nextStreamIndex(today), [today]);
+
+  useEffect(() => {
+    fetch("/api/schedule", { cache: "no-store" })
+      .then((response) => response.ok ? response.json() : Promise.reject())
+      .then((data) => Array.isArray(data.schedule) && setSchedule(data.schedule))
+      .catch(() => {});
+  }, []);
+
+  const nextIndex = useMemo(() => nextStreamIndex(schedule, today), [schedule, today]);
   const next = nextIndex >= 0 ? schedule[nextIndex] : null;
 
   return (
