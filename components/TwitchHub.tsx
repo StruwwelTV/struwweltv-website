@@ -68,7 +68,7 @@ export function TwitchHub() {
               <div className={styles.offlineInner}>
                 <span className={styles.offlineEyebrow}>GERADE OFFLINE</span>
                 <h3 className={styles.offlineTitle}>Das Chaos macht kurz Pause.</h3>
-                <p className={styles.offlineText}>Kein kaputter Twitch-Frame mehr: Sobald Struwwel live geht, erscheint hier automatisch der Stream. Bis dahin warten Clips und der Kanal auf dich.</p>
+                <p className={styles.offlineText}>Gerade ist Sendepause. StruwwelTV ist aktuell offline – aber das Chaos ist nur auf Standby. Schau dir bis zum nächsten Stream die neuesten Clips an oder komm auf Discord vorbei.</p>
                 <a className={styles.offlineButton} href="https://www.twitch.tv/struwwelTV" target="_blank" rel="noreferrer">Zum Twitch-Kanal ↗</a>
               </div>
             </div>
