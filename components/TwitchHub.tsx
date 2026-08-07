@@ -98,27 +98,38 @@ export function TwitchHub() {
         </aside>
       </div>
 
-      <div className="clip-section" id="clips">
-        <div className="clip-title-row">
-          <h3>Neueste Clips</h3>
-          <a href="https://www.twitch.tv/struwweltv/videos?filter=clips" target="_blank" rel="noreferrer">Alle Clips ↗</a>
+      <section className={styles.clipShowcase} id="clips">
+        <div className={styles.clipHeader}>
+          <div>
+            <span className={styles.clipEyebrow}>HIGHLIGHTS AUS DEM CHAOS</span>
+            <h3 className={styles.clipHeading}>Neueste Clips</h3>
+            <p className={styles.clipIntro}>Drei frische Momente aus dem Stream – gute Plays, schlechte Entscheidungen und alles dazwischen.</p>
+          </div>
+          <a className={styles.allClipsButton} href="https://www.twitch.tv/struwweltv/videos?filter=clips" target="_blank" rel="noreferrer">Alle Clips auf Twitch ↗</a>
         </div>
+
         <div className={styles.clipGrid}>
           {!data && !error && <div className={styles.empty}>Twitch-Clips werden geladen …</div>}
           {error && <div className={styles.empty}>Die Clips konnten gerade nicht geladen werden.</div>}
           {data && clips.length === 0 && <div className={styles.empty}>Noch keine Clips gefunden. Auf Twitch gibt es trotzdem genug Chaos zu entdecken.</div>}
-          {clips.map((clip) => (
-            <a className={styles.clipCard} href={clip.url} target="_blank" rel="noreferrer" key={clip.id}>
+          {clips.map((clip, index) => (
+            <a className={`${styles.clipCard} ${index === 0 ? styles.featuredClip : ""}`} href={clip.url} target="_blank" rel="noreferrer" key={clip.id}>
               <div className={styles.thumb}>
                 <img src={clip.thumbnailUrl} alt={`Twitch Clip: ${clip.title}`} loading="lazy" />
+                <div className={styles.thumbShade} />
+                <span className={styles.clipNumber}>0{index + 1}</span>
                 <span className={styles.play}>▶</span>
+                <span className={styles.watchLabel}>Clip ansehen ↗</span>
               </div>
-              <div className={styles.meta}><span>{clipDate(clip.createdAt)}</span><span>{clip.viewCount.toLocaleString("de-DE")} Views</span></div>
-              <h4 className={styles.title}>{clip.title}</h4>
+              <div className={styles.cardBody}>
+                <div className={styles.meta}><span>{clipDate(clip.createdAt)}</span><span>{clip.viewCount.toLocaleString("de-DE")} Views</span></div>
+                <h4 className={styles.title}>{clip.title}</h4>
+                <div className={styles.cardFooter}><span>TWITCH</span><span>{Math.round(clip.duration)} Sek.</span></div>
+              </div>
             </a>
           ))}
         </div>
-      </div>
+      </section>
     </>
   );
 }
