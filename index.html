@@ -1,34 +1,35 @@
-
 <!doctype html>
 <html lang="de">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#42b8b4">
-  <meta name="description" content="StruwwelTV – Warzone, Entertainment und Community. Streams, Highlights, Termine und Socials an einem Ort.">
+  <meta name="theme-color" content="#05070b">
+  <meta name="description" content="StruwwelTV – Chaos. Kugeln. Community. Twitch, Clips, Community und Streamplan an einem Ort.">
   <meta property="og:title" content="StruwwelTV">
-  <link rel="canonical" href="https://struwweltv.de/">
   <meta property="og:description" content="Chaos. Kugeln. Community.">
   <meta property="og:image" content="assets/logo.png">
+  <link rel="canonical" href="https://struwweltv.de/">
   <title>StruwwelTV – Chaos. Kugeln. Community.</title>
   <link rel="icon" href="assets/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="noise"></div>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
   <header class="site-header" id="top">
-    <a class="brand" href="#top" aria-label="Startseite">
+    <a class="brand" href="#top" aria-label="StruwwelTV Startseite">
       <img src="assets/logo.png" alt="StruwwelTV Logo">
       <span>STRUWWEL<span>TV</span></span>
     </a>
     <button class="menu-toggle" aria-label="Menü öffnen" aria-expanded="false">☰</button>
-    <nav class="nav">
+    <nav class="nav" aria-label="Hauptnavigation">
       <a href="#live">Live</a>
+      <a href="#highlights">Clips</a>
       <a href="#about">Über mich</a>
-      <a href="#highlights">Highlights</a>
       <a href="#schedule">Streamplan</a>
       <a href="#community">Community</a>
     </nav>
@@ -36,89 +37,90 @@
 
   <main>
     <section class="hero section">
-      <div class="orb orb-a"></div>
-      <div class="orb orb-b"></div>
       <div class="hero-copy reveal">
         <div class="status-pill" id="stream-status"><span class="status-dot"></span><span id="stream-status-text">Twitch-Status wird geladen …</span></div>
-        <p class="eyebrow">WARZONE · ENTERTAINMENT · COMMUNITY</p>
+        <p class="eyebrow">STRUWWELTV · LIVE ENTERTAINMENT</p>
         <h1>Chaos.<br><span>Kugeln.</span><br>Community.</h1>
-        <p class="lead">Willkommen bei StruwwelTV. Hier treffen fragwürdige Entscheidungen auf überraschend gute Runden – mit einer Community, die jeden Treffer und jeden Totalausfall feiert.</p>
+        <p class="lead">Warzone, spontane Challenges, ehrliche Reaktionen und eine Community, die auch dann noch lacht, wenn der Plan längst im Gulag liegt.</p>
         <div class="hero-actions">
-          <a class="button primary" data-link="twitch" target="_blank" rel="noopener">Auf Twitch ansehen</a>
+          <a class="button primary" data-link="twitch" target="_blank" rel="noopener">Live auf Twitch</a>
           <a class="button ghost" data-link="discord" target="_blank" rel="noopener">Discord beitreten</a>
         </div>
-        <div class="stats">
-          <div><strong>LIVE</strong><span>Warzone & mehr</span></div>
-          <div><strong>18+</strong><span>Humor mit Schäden</span></div>
-          <div><strong>100%</strong><span>Community-Fokus</span></div>
+        <div class="hero-meta">
+          <span>Streamer aus Lüneburg</span>
+          <span>Warzone & Community Games</span>
+          <span>Schwarzer Humor, kein Hochglanz</span>
         </div>
       </div>
+
       <div class="hero-visual reveal">
-        <div class="logo-shell">
-          <div class="logo-ring"></div>
-          <img src="assets/logo.png" alt="STV Logo">
+        <div class="hero-orbit"></div>
+        <div class="hero-logo"><img src="assets/logo.png" alt="STV Logo"></div>
+        <div class="portrait-wrap">
+          <div class="portrait-glow"></div>
+          <img src="assets/creator.jpg" onerror="this.onerror=null;this.src='assets/bastian-struff.jpg'" alt="Bastian alias StruwwelTV">
         </div>
-        <div class="floating-card card-one">LIVE<br><strong>STRUWWELTV</strong></div>
-        <div class="floating-card card-two">NEXT DROP<br><strong>Ungeplant.</strong></div>
+        <div class="float-card live-card"><span>STATUS</span><strong id="hero-live-label">TWITCH</strong></div>
+        <div class="float-card slogan-card"><span>EST. COMMUNITY</span><strong>CHAOS MIT SYSTEM</strong></div>
       </div>
     </section>
 
     <section id="live" class="section live-section">
       <div class="section-heading reveal">
         <p class="eyebrow">JETZT AUF TWITCH</p>
-        <h2>Mitten im Chaos</h2>
-        <p>Der Twitch-Player wird direkt auf der Seite eingebunden. Passe in <code>config.js</code> nur deinen Kanalnamen und deine Domain an.</p>
+        <h2>Mitten im Chaos.</h2>
+        <p>Wenn Struwwel live ist, bekommst du hier automatisch Titel, Spiel und Zuschauerzahl – direkt aus der Twitch-API.</p>
       </div>
       <div class="stream-layout reveal">
         <div class="stream-frame">
           <iframe id="twitch-player" title="Twitch Stream von StruwwelTV" allowfullscreen></iframe>
           <div class="offline-overlay" id="offline-overlay">
             <img src="assets/logo.png" alt="">
-            <h3>Gerade nicht live</h3>
+            <h3>Gerade offline.</h3>
             <p>Der nächste taktische Totalschaden kommt bestimmt.</p>
-            <a class="button primary" data-link="twitch" target="_blank" rel="noopener">Kanal öffnen</a>
+            <a class="button primary" data-link="twitch" target="_blank" rel="noopener">Twitch öffnen</a>
           </div>
         </div>
         <aside class="live-sidebar">
-          <p class="eyebrow">STREAM-VERSprechen</p>
+          <p class="eyebrow">DER STREAM</p>
           <h3>Kein Hochglanz.<br>Nur echte Reaktionen.</h3>
           <ul class="check-list">
-            <li>Warzone-Runden mit maximaler Selbstüberschätzung</li>
-            <li>Community-Games, Challenges und Events</li>
-            <li>Schwarzer Humor mit funktionierendem Gewissen</li>
+            <li>Warzone & Shooter</li>
+            <li>Community-Games und Events</li>
+            <li>Selbstironie statt Pro-Gamer-Gehabe</li>
           </ul>
         </aside>
       </div>
     </section>
 
+    <section id="highlights" class="section">
+      <div class="section-heading reveal">
+        <p class="eyebrow">TWITCH CLIPS</p>
+        <h2>Momente mit Beweismaterial.</h2>
+        <p>Die neuesten Clips werden automatisch aus deinem Twitch-Kanal geladen.</p>
+      </div>
+      <div class="clip-grid" id="clip-grid"><p class="loading-message">Aktuelle Twitch-Clips werden geladen …</p></div>
+      <div class="center reveal"><a class="text-link" data-link="twitch" target="_blank" rel="noopener">Alle Clips auf Twitch ansehen →</a></div>
+    </section>
+
     <section id="about" class="section creator-section">
       <div class="creator-photo reveal">
         <div class="photo-glow"></div>
-        <img src="assets/bastian-struff.jpg" alt="Bastian alias StruwwelTV">
+        <img src="assets/creator.jpg" onerror="this.onerror=null;this.src='assets/bastian-struff.jpg'" alt="Bastian alias StruwwelTV">
       </div>
       <div class="about-card reveal">
-        <p class="eyebrow">HINTER DEM LOGO</p>
+        <p class="eyebrow">HINTER STRUWWELTV</p>
         <h2>Moin, ich bin Bastian.</h2>
-        <p>Auf Twitch kennt man mich als StruwwelTV. Ich streame mit viel Herz, einer guten Portion Selbstironie und einer Community, bei der Unterhaltung wichtiger ist als eine perfekte Statistik.</p>
-        <p>Bei mir treffen Warzone, spontane Challenges und ehrliche Reaktionen auf schwarzen Humor – ohne dabei den Respekt füreinander zu verlieren.</p>
+        <p>Auf Twitch kennt man mich als StruwwelTV. Bei mir geht es weniger um perfekte Statistiken und mehr um gute Unterhaltung, spontane Momente und eine Community, in der man gerne hängen bleibt.</p>
+        <p>Warzone ist mein Zuhause, aber der Stream lebt vor allem von den Leuten im Chat, von Challenges, Events und dem Humor, der entsteht, wenn der Plan mal wieder besser war als die Ausführung.</p>
         <div class="creator-quote">„Chaos. Kugeln. Community.“</div>
       </div>
-    </section>
-
-    <section id="highlights" class="section">
-      <div class="section-heading reveal">
-        <p class="eyebrow">CLIPS & HIGHLIGHTS</p>
-        <h2>Momente mit Beweismaterial</h2>
-      </div>
-      <div class="clip-grid" id="clip-grid"><p class="loading-message">Aktuelle Twitch-Clips werden geladen …</p></div>
-            <div class="center reveal"><a class="text-link" data-link="youtube" target="_blank" rel="noopener">Mehr Highlights ansehen →</a></div>
     </section>
 
     <section id="schedule" class="section schedule-section">
       <div class="section-heading reveal">
         <p class="eyebrow">STREAMPLAN</p>
-        <h2>Wann das Chaos beginnt</h2>
-        <p>Die Zeiten lassen sich zentral in <code>config.js</code> bearbeiten.</p>
+        <h2>Wann das Chaos beginnt.</h2>
       </div>
       <div class="schedule-grid reveal" id="schedule-grid"></div>
     </section>
@@ -126,20 +128,20 @@
     <section id="community" class="section community-section">
       <div class="community-box reveal">
         <div>
-          <p class="eyebrow">MEHR ALS NUR ZUSCHAUEN</p>
-          <h2>Werde Teil der Community.</h2>
-          <p>Mitspielen, Clips teilen, Memes abladen und bei Events dabei sein. Der Discord ist das Zuhause, wenn der Stream offline ist.</p>
+          <p class="eyebrow">COMMUNITY</p>
+          <h2>Nicht nur zuschauen.</h2>
+          <p>Mitspielen, Clips teilen, Memes abladen oder einfach zwischen den Streams dabei bleiben. Der Discord ist das Zuhause der Community.</p>
         </div>
         <div class="community-actions">
           <a class="button primary" data-link="discord" target="_blank" rel="noopener">Zum Discord</a>
           <a class="button ghost" data-link="instagram" target="_blank" rel="noopener">Instagram</a>
-          <a class="button ghost" data-link="tiktok" target="_blank" rel="noopener">TikTok</a>
+          <a class="button ghost" data-link="youtube" target="_blank" rel="noopener">YouTube</a>
         </div>
       </div>
       <div class="social-grid reveal">
-        <a data-link="twitch" target="_blank" rel="noopener"><span>TW</span><strong>Twitch</strong><small>Live & VODs</small></a>
-        <a data-link="youtube" target="_blank" rel="noopener"><span>YT</span><strong>YouTube</strong><small>Highlights & Shorts</small></a>
-        <a data-link="instagram" target="_blank" rel="noopener"><span>IG</span><strong>Instagram</strong><small>Updates, Reels & Stories</small></a>
+        <a data-link="twitch" target="_blank" rel="noopener"><span>TW</span><strong>Twitch</strong><small>Streams & Clips</small></a>
+        <a data-link="youtube" target="_blank" rel="noopener"><span>YT</span><strong>YouTube</strong><small>Videos & Highlights</small></a>
+        <a data-link="instagram" target="_blank" rel="noopener"><span>IG</span><strong>Instagram</strong><small>Updates & Reels</small></a>
       </div>
     </section>
   </main>
@@ -147,7 +149,7 @@
   <footer>
     <div class="footer-brand"><img src="assets/logo.png" alt=""><div><strong>STRUWWELTV</strong><span>Chaos. Kugeln. Community.</span></div></div>
     <div class="footer-links"><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></div>
-    <p>© <span id="year"></span> StruwwelTV. Alle Rechte vorbehalten.</p>
+    <p>© <span id="year"></span> StruwwelTV.</p>
   </footer>
 
   <script src="config.js"></script>
