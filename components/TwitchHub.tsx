@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 type Clip = {
   id: string;
@@ -34,10 +34,24 @@ function elapsed(startedAt?: string) {
 export function TwitchHub() {
   const [data, setData] = useState<TwitchData | null>(null);
   const [error, setError] = useState(false);
-  const [host, setHost] = useState<string | null>(null);
+  const [playerSrc, setPlayerSrc] = useState<string | null>(null);
 
   useEffect(() => {
-    setHost(window.location.hostname);
+    const currentHost = window.location.hostname;
+    const parents = Array.from(new Set([
+      currentHost,
+      "struwweltv.de",
+      "www.struwweltv.de",
+      "snazzy-centaur-9f611d.netlify.app",
+    ])).filter(Boolean);
+
+    const query = parents
+      .map((parent) => `parent=${encodeURIComponent(parent)}`)
+      .join("&");
+
+    setPlayerSrc(
+      `https://player.twitch.tv/?channel=struwweltv&${query}&muted=true&autoplay=false`,
+    );
 
     let active = true;
     fetch("/api/twitch", { cache: "no-store" })
@@ -53,12 +67,6 @@ export function TwitchHub() {
     };
   }, []);
 
-  const playerSrc = useMemo(() => {
-    if (!host) return null;
-    const parent = encodeURIComponent(host);
-    return `https://player.twitch.tv/?channel=struwweltv&parent=${parent}&muted=true`;
-  }, [host]);
-
   return (
     <>
       <div className="twitch-layout">
@@ -69,7 +77,8 @@ export function TwitchHub() {
               src={playerSrc}
               title="StruwwelTV Twitch Stream"
               allowFullScreen
-              allow="autoplay; fullscreen"
+              allow="autoplay; fullscreen; picture-in-picture"
+              referrerPolicy="strict-origin-when-cross-origin"
             />
           ) : (
             <div className="player-loading">Twitch-Player wird geladen …</div>
