@@ -17,13 +17,18 @@ export function TwitchPlayer() {
     const mount = () => {
       if (loaded.current || !window.Twitch?.Player) return;
       loaded.current = true;
+
+      const parents = Array.from(
+        new Set(["struwweltv.de", "www.struwweltv.de", window.location.hostname].filter(Boolean)),
+      );
+
       new window.Twitch.Player("twitch-embed", {
         channel: "struwweltv",
         width: "100%",
         height: "100%",
         autoplay: false,
         muted: true,
-        parent: [window.location.hostname],
+        parent: parents,
       });
     };
 
