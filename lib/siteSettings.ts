@@ -11,6 +11,15 @@ export type SiteSettings = {
   instagramUrl:string;
   youtubeUrl:string;
   hardware:HardwareItem[];
+  imprintProvider:string;
+  imprintAddress:string;
+  imprintEmail:string;
+  imprintResponsible:string;
+  privacyIntro:string;
+  privacyHosting:string;
+  privacyTwitch:string;
+  privacyExternalLinks:string;
+  privacyContact:string;
 };
 
 export const defaultSiteSettings: SiteSettings = {
@@ -22,6 +31,15 @@ export const defaultSiteSettings: SiteSettings = {
   discordUrl:"https://discord.gg/YZDB59vdV7",
   instagramUrl:"https://instagram.com/struwweltv",
   youtubeUrl:"https://youtube.com/struwwelTV",
+  imprintProvider:"Bastian Struff",
+  imprintAddress:"Föhrenweg 8\n21339 Lüneburg\nDeutschland",
+  imprintEmail:"mail@struwweltv.de",
+  imprintResponsible:"Bastian Struff\nAnschrift wie oben",
+  privacyIntro:"Diese Website verarbeitet nur die Daten, die für den technischen Betrieb und die eingebundenen Funktionen erforderlich sind.",
+  privacyHosting:"Die Website wird über Netlify bereitgestellt. Beim Aufruf können technisch erforderliche Verbindungsdaten verarbeitet werden.",
+  privacyTwitch:"Die Website bindet Inhalte und Daten von Twitch ein. Beim Laden des Twitch-Players oder beim Öffnen von Twitch-Clips kann eine Verbindung zu Twitch Interactive, Inc. hergestellt werden.",
+  privacyExternalLinks:"Die Website verlinkt unter anderem auf Twitch, YouTube, Instagram und Discord. Für diese externen Angebote gelten die Datenschutzbestimmungen der jeweiligen Plattform.",
+  privacyContact:"mail@struwweltv.de",
   hardware:[
     {icon:"CPU",label:"Prozessor",name:"AMD Ryzen 7 7800X3D",detail:"8C / 16T · AM5 · 3D V-Cache",href:"https://geizhals.de/amd-ryzen-7-7800x3d-100-100000910wof-a2872148.html"},
     {icon:"GPU",label:"Grafikkarte",name:"MSI GeForce RTX 4070 Ti SUPER Ventus 3X OC",detail:"16 GB · GeForce RTX 40 SUPER",href:"https://geizhals.de/msi-geforce-rtx-4070-ti-super-16g-ventus-3x-oc-a3781093.html"},
@@ -35,5 +53,17 @@ export const defaultSiteSettings: SiteSettings = {
 };
 
 const store = () => getStore("struwweltv-cms");
-export async function getSiteSettings(){ try { return (await store().get("site-settings",{type:"json"})) as SiteSettings || defaultSiteSettings; } catch { return defaultSiteSettings; } }
+export async function getSiteSettings(){
+  try {
+    const saved = await store().get("site-settings",{type:"json"}) as Partial<SiteSettings> | null;
+    if (!saved) return defaultSiteSettings;
+    return {
+      ...defaultSiteSettings,
+      ...saved,
+      hardware: Array.isArray(saved.hardware) ? saved.hardware : defaultSiteSettings.hardware,
+    };
+  } catch {
+    return defaultSiteSettings;
+  }
+}
 export async function saveSiteSettings(settings:SiteSettings){ await store().setJSON("site-settings",settings); }
