@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getSiteSettings } from "@/lib/siteSettings";
+import { getSiteSettings } from "@/lib/siteSettingsStore";
 
 function withBreaks(value:string){
   return value.split("\n").map((line,index)=><span key={`${line}-${index}`}>{line}{index<value.split("\n").length-1&&<br/>}</span>);
