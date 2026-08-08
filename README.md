@@ -1,68 +1,51 @@
-
 # StruwwelTV Website
 
-## Schnellstart
+Die StruwwelTV-Website läuft als Next.js-Anwendung über Cloudflare Workers und wird aus diesem GitHub-Repository gebaut und deployed.
 
-1. Entpacke den Ordner.
-2. Öffne `config.js`.
-3. Trage deine Social-Media-Links und deinen Streamplan ein.
-4. Starte lokal einen Webserver, zum Beispiel:
-   `python -m http.server 8000`
-5. Öffne `http://localhost:8000`.
+## Architektur
 
-## Twitch-Einbettung
+- Next.js 15
+- OpenNext für Cloudflare
+- Cloudflare Workers für Hosting und API-Routen
+- Cloudflare KV für persistente Control-Center-Daten
+- Twitch API für Live-Status, Clips und Streamdaten
+- GitHub als Codebasis
 
-Twitch verlangt für den eingebetteten Player eine erlaubte Parent-Domain.
-Sobald die Website online ist, trägst du in `config.js` deine Domain ein:
+## Deployment
 
-`twitchParentDomains: ["struwweltv.de", "www.struwweltv.de"]`
+Cloudflare baut den `main`-Branch automatisch mit:
 
-## Veröffentlichung
+```bash
+npm run cf:build
+```
 
-Der Ordner kann direkt bei Netlify, Vercel, GitHub Pages oder einem normalen Webhoster hochgeladen werden.
+und deployed anschließend mit Wrangler.
 
-## Vor dem Livegang ersetzen
+## Cloudflare Bindings
 
-- Discord-, YouTube-, Instagram- und TikTok-Link
-- Streamzeiten
-- Impressumsangaben
-- Datenschutztext
-- Beispiel-Clips
-- Domain in `twitchParentDomains`
+Für das Control Center wird ein KV-Binding mit dem Namen `SITE_DATA` benötigt. Darin werden unter anderem gespeichert:
 
-## Enthalten
+- `stream-schedule`
+- `site-settings`
 
-- Responsive Startseite
-- Twitch-Player
-- Streamplan aus Konfigurationsdatei
-- Social Hub
-- Highlight-Bereich
-- Mobile Navigation
-- Scroll-Animationen
-- SEO-Basisdaten
-- Impressums- und Datenschutzvorlage
+Secrets und Runtime-Variablen wie Twitch-Zugangsdaten sowie Admin-Zugangsdaten werden direkt in Cloudflare gepflegt und gehören nicht ins Repository.
 
+## Domains
 
-## Bereits eingetragen
+- https://struwweltv.de
+- https://www.struwweltv.de
 
-- Domain: https://struwweltv.de
-- Twitch: https://www.twitch.tv/struwwelTV
-- YouTube: https://www.youtube.com/struwwelTV
-- Discord: https://discord.gg/YZDB59vdV7
-- Impressum: Bastian Struff, Föhrenweg 8, 21339 Lüneburg
+Beide Domains zeigen direkt auf den Cloudflare Worker.
 
-Noch offen:
-- E-Mail-Adresse im Impressum
-- Instagram-/TikTok-Links
+## Control Center
 
+Der interne Administrationsbereich befindet sich unter `/admin`. Dort können Streamplan, Website-Texte, Setup, Community-Links und rechtliche Inhalte verwaltet werden.
 
-## Version 1.2
+## Lokale Entwicklung
 
-- Instagram ergänzt
-- TikTok vollständig entfernt
-- Porträtfoto im Über-mich-Bereich eingebaut
-- Slogan „Chaos. Kugeln. Community.“ bestätigt
-- Twitch-Clips und Videoübersicht verlinkt
-- Erster öffentlich auffindbarer Clip „Kills zusammen“ eingebunden
+```bash
+npm install
+npm run dev
+```
 
-Hinweis: Für automatisch wechselnde Clip-Vorschaubilder ist später eine Twitch-API-Anbindung mit Client-ID nötig.
+Für Cloudflare-spezifische Funktionen sollten lokale Bindings bzw. eine passende Wrangler-Konfiguration verwendet werden.
