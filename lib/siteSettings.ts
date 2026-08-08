@@ -1,6 +1,3 @@
-import "server-only";
-import { getSiteDataStore } from "@/lib/cloudflareStore";
-
 export type HardwareItem = { icon:string; label:string; name:string; detail:string; href?:string };
 export type SiteSettings = {
   heroText:string;
@@ -52,23 +49,3 @@ export const defaultSiteSettings: SiteSettings = {
     {icon:"SSD",label:"Speicher",name:"500 GB SSD · 1 TB SSD · 1 TB HDD",detail:"2,5 TB Gesamtspeicher"}
   ]
 };
-
-const KEY = "site-settings";
-
-export async function getSiteSettings() {
-  try {
-    const saved = await getSiteDataStore().get(KEY, "json") as Partial<SiteSettings> | null;
-    if (!saved) return defaultSiteSettings;
-    return {
-      ...defaultSiteSettings,
-      ...saved,
-      hardware: Array.isArray(saved.hardware) ? saved.hardware : defaultSiteSettings.hardware,
-    };
-  } catch {
-    return defaultSiteSettings;
-  }
-}
-
-export async function saveSiteSettings(settings: SiteSettings) {
-  await getSiteDataStore().put(KEY, JSON.stringify(settings));
-}
