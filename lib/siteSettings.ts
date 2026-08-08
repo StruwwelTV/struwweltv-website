@@ -1,4 +1,5 @@
-import { getStore } from "@netlify/blobs";
+import "server-only";
+import { getSiteDataStore } from "@/lib/cloudflareStore";
 
 export type HardwareItem = { icon:string; label:string; name:string; detail:string; href?:string };
 export type SiteSettings = {
@@ -36,7 +37,7 @@ export const defaultSiteSettings: SiteSettings = {
   imprintEmail:"mail@struwweltv.de",
   imprintResponsible:"Bastian Struff\nAnschrift wie oben",
   privacyIntro:"Diese Website verarbeitet nur die Daten, die für den technischen Betrieb und die eingebundenen Funktionen erforderlich sind.",
-  privacyHosting:"Die Website wird über Netlify bereitgestellt. Beim Aufruf können technisch erforderliche Verbindungsdaten verarbeitet werden.",
+  privacyHosting:"Die Website wird über Cloudflare Workers bereitgestellt. Beim Aufruf können technisch erforderliche Verbindungsdaten über die Infrastruktur von Cloudflare verarbeitet werden.",
   privacyTwitch:"Die Website bindet Inhalte und Daten von Twitch ein. Beim Laden des Twitch-Players oder beim Öffnen von Twitch-Clips kann eine Verbindung zu Twitch Interactive, Inc. hergestellt werden.",
   privacyExternalLinks:"Die Website verlinkt unter anderem auf Twitch, YouTube, Instagram und Discord. Für diese externen Angebote gelten die Datenschutzbestimmungen der jeweiligen Plattform.",
   privacyContact:"mail@struwweltv.de",
@@ -52,10 +53,11 @@ export const defaultSiteSettings: SiteSettings = {
   ]
 };
 
-const store = () => getStore("struwweltv-cms");
-export async function getSiteSettings(){
+const KEY = "site-settings";
+
+export async function getSiteSettings() {
   try {
-    const saved = await store().get("site-settings",{type:"json"}) as Partial<SiteSettings> | null;
+    const saved = await getSiteDataStore().get(KEY, "json") as Partial<SiteSettings> | null;
     if (!saved) return defaultSiteSettings;
     return {
       ...defaultSiteSettings,
@@ -66,4 +68,7 @@ export async function getSiteSettings(){
     return defaultSiteSettings;
   }
 }
-export async function saveSiteSettings(settings:SiteSettings){ await store().setJSON("site-settings",settings); }
+
+export async function saveSiteSettings(settings: SiteSettings) {
+  await getSiteDataStore().put(KEY, JSON.stringify(settings));
+}
