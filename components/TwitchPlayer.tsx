@@ -54,5 +54,17 @@ export function TwitchPlayer() {
     };
   }, []);
 
-  return <div id="twitch-embed" className="twitch-embed" />;
+  return (
+    <div
+      id="twitch-embed"
+      className="twitch-embed"
+      style={{
+        position: "absolute",
+        inset: 0,
+        width: "100%",
+        height: "100%",
+        overflow: "hidden",
+      }}
+    />
+  );
 }
