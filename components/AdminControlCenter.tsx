@@ -418,7 +418,7 @@ export function AdminControlCenter() {
                     </div>
                     <strong>
                       {nextStream
-                        ? `${formatDate(nextStream.day.date)}. · ${nextStream.stream.segments[0].start}`
+                        ? `${formatDate(nextStream.day.date)} · ${nextStream.stream.segments[0].start}`
                         : "Nicht geplant"}
                     </strong>
                     <p>
@@ -464,8 +464,8 @@ export function AdminControlCenter() {
                   <div>
                     <h2>Streamplan · KW {weekNumber(schedule.weekStart)}</h2>
                     <p>
-                      {formatDate(schedule.days[0].date)}. –{" "}
-                      {formatDate(schedule.days[6].date)}. · Mehrere Streams und
+                      {formatDate(schedule.days[0].date)} –{" "}
+                      {formatDate(schedule.days[6].date)} · Mehrere Streams und
                       Spielwechsel pro Tag möglich.
                     </p>
                     <div>
@@ -501,7 +501,7 @@ export function AdminControlCenter() {
                       style={{ display: "block" }}
                     >
                       <div className={styles.day}>
-                        {day.label} · {formatDate(day.date)}.
+                        {day.label} · {formatDate(day.date)}
                       </div>
                       {day.streams.map((stream, streamIndex) => (
                         <div

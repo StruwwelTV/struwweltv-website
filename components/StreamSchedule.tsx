@@ -47,12 +47,12 @@ export function StreamSchedule() {
             STREAMPLAN · KW {weekNumber(schedule.weekStart)}
           </span>
           <h3>
-            {formatDate(schedule.days[0].date)}. –{" "}
-            {formatDate(schedule.days[6].date)}.
+            {formatDate(schedule.days[0].date)} –{" "}
+            {formatDate(schedule.days[6].date)}
           </h3>
           <p>
             {next
-              ? `Nächster Stream: ${next.day.label}, ${formatDate(next.day.date)}. · ${next.stream.segments[0].start}`
+              ? `Nächster Stream: ${next.day.label}, ${formatDate(next.day.date)} · ${next.stream.segments[0].start}`
               : "Für diese Woche ist noch kein Stream geplant."}
           </p>
         </div>
@@ -68,7 +68,7 @@ export function StreamSchedule() {
           >
             <div className={styles.topline}>
               <span className={styles.day}>
-                {day.day} · {formatDate(day.date)}.
+                {day.day} · {formatDate(day.date)}
               </span>
               {day.date === today && (
                 <span className={styles.badge}>HEUTE</span>
