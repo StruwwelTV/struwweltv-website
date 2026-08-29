@@ -30,6 +30,8 @@ Für das Control Center wird ein KV-Binding mit dem Namen `SITE_DATA` benötigt.
 
 Secrets und Runtime-Variablen wie Twitch-Zugangsdaten sowie Admin-Zugangsdaten werden direkt in Cloudflare gepflegt und gehören nicht ins Repository.
 
+Für die Discord-Synchronisierung wird zusätzlich das verschlüsselte Worker-Secret `DISCORD_STREAMPLAN_WEBHOOK_URL` benötigt. Die Webhook-URL darf nicht in Wrangler-Konfigurationen oder GitHub gespeichert werden.
+
 ## Domains
 
 - https://struwweltv.de
@@ -49,3 +51,4 @@ npm run dev
 ```
 
 Für Cloudflare-spezifische Funktionen sollten lokale Bindings bzw. eine passende Wrangler-Konfiguration verwendet werden.
+

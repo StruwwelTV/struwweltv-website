@@ -1,71 +1,121 @@
 "use client";
-
 import { useEffect, useMemo, useState } from "react";
 import styles from "@/components/StreamSchedule.module.css";
-import { defaultSchedule, type ScheduleEntry } from "@/lib/scheduleData";
-
-function nextStreamIndex(schedule: ScheduleEntry[], today: number) {
-  for (let offset = 0; offset < 7; offset += 1) {
-    const candidate = (today + offset) % 7;
-    const index = schedule.findIndex((entry) => entry.key === candidate && entry.active);
-    if (index !== -1) return index;
-  }
-  return -1;
-}
-
+import {
+  createEmptyWeek,
+  currentWeekStart,
+  formatDate,
+  weekNumber,
+  type WeeklySchedule,
+} from "@/lib/scheduleData";
 export function StreamSchedule() {
-  const [schedule, setSchedule] = useState<ScheduleEntry[]>(defaultSchedule);
-  const today = new Date().getDay();
-
+  const [schedule, setSchedule] = useState<WeeklySchedule>(() =>
+    createEmptyWeek(currentWeekStart()),
+  );
   useEffect(() => {
     fetch("/api/schedule", { cache: "no-store" })
-      .then((response) => response.ok ? response.json() : Promise.reject())
-      .then((data) => Array.isArray(data.schedule) && setSchedule(data.schedule))
+      .then((response) => (response.ok ? response.json() : Promise.reject()))
+      .then((data) => data.schedule?.days && setSchedule(data.schedule))
       .catch(() => {});
   }, []);
-
-  const nextIndex = useMemo(() => nextStreamIndex(schedule, today), [schedule, today]);
-  const next = nextIndex >= 0 ? schedule[nextIndex] : null;
-
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Berlin",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  const next = useMemo(
+    () =>
+      schedule.days
+        .flatMap((day) => day.streams.map((stream) => ({ day, stream })))
+        .filter(
+          ({ day, stream }) =>
+            `${day.date}T${stream.segments[0].start}` >= `${today}T00:00`,
+        )
+        .sort((a, b) =>
+          `${a.day.date}${a.stream.segments[0].start}`.localeCompare(
+            `${b.day.date}${b.stream.segments[0].start}`,
+          ),
+        )[0],
+    [schedule, today],
+  );
   return (
     <div className={styles.wrapper}>
       <div className={styles.summary}>
         <div>
-          <span className={styles.eyebrow}>NÄCHSTER STREAM</span>
-          <h3>{next ? `${next.label} · ${next.time}` : "Noch offen"}</h3>
-          <p>{next ? next.title : "Der nächste Termin wird noch angekündigt."}</p>
+          <span className={styles.eyebrow}>
+            STREAMPLAN · KW {weekNumber(schedule.weekStart)}
+          </span>
+          <h3>
+            {formatDate(schedule.days[0].date)}. –{" "}
+            {formatDate(schedule.days[6].date)}.
+          </h3>
+          <p>
+            {next
+              ? `Nächster Stream: ${next.day.label}, ${formatDate(next.day.date)}. · ${next.stream.segments[0].start}`
+              : "Für diese Woche ist noch kein Stream geplant."}
+          </p>
         </div>
-        <div className={styles.pulse}><span /> PLAN AKTIV</div>
+        <div className={styles.pulse}>
+          <span /> AKTUELLE WOCHE
+        </div>
       </div>
-
       <div className={styles.grid}>
-        {schedule.map((entry, index) => {
-          const isToday = entry.key === today;
-          const isNext = index === nextIndex;
-          return (
-            <article
-              key={entry.day}
-              className={`${styles.card} ${entry.active ? styles.active : styles.offline} ${isToday ? styles.today : ""} ${isNext ? styles.next : ""}`}
-            >
-              <div className={styles.topline}>
-                <span className={styles.day}>{entry.day}</span>
-                {isToday && <span className={styles.badge}>HEUTE</span>}
-                {!isToday && isNext && <span className={`${styles.badge} ${styles.nextBadge}`}>ALS NÄCHSTES</span>}
-              </div>
-              <div className={styles.body}>
-                <strong>{entry.time}</strong>
-                <small>{entry.title}</small>
-              </div>
-              <div className={styles.status}>
-                <span className={entry.active ? styles.dotActive : styles.dotOffline} />
-                {entry.active ? "Stream geplant" : "Offline"}
-              </div>
-            </article>
-          );
-        })}
+        {schedule.days.map((day) => (
+          <article
+            key={day.date}
+            className={`${styles.card} ${day.streams.length ? styles.active : styles.offline} ${day.date === today ? styles.today : ""}`}
+          >
+            <div className={styles.topline}>
+              <span className={styles.day}>
+                {day.day} · {formatDate(day.date)}.
+              </span>
+              {day.date === today && (
+                <span className={styles.badge}>HEUTE</span>
+              )}
+            </div>
+            <div className={styles.body}>
+              {day.streams.length ? (
+                day.streams.map((stream, streamIndex) => (
+                  <div key={stream.id}>
+                    <small>
+                      {day.streams.length > 1
+                        ? `STREAM ${streamIndex + 1}`
+                        : "STREAM"}
+                    </small>
+                    {stream.segments.map((segment) => (
+                      <div key={segment.id}>
+                        <strong>{segment.start}</strong>
+                        <small> {segment.title}</small>
+                      </div>
+                    ))}
+                  </div>
+                ))
+              ) : (
+                <>
+                  <strong>Offline</strong>
+                  <small>Kein Stream geplant</small>
+                </>
+              )}
+            </div>
+            <div className={styles.status}>
+              <span
+                className={
+                  day.streams.length ? styles.dotActive : styles.dotOffline
+                }
+              />
+              {day.streams.length
+                ? `${day.streams.length} Stream${day.streams.length > 1 ? "s" : ""} geplant`
+                : "Offline"}
+            </div>
+          </article>
+        ))}
       </div>
-
-      <div className={styles.note}>Zeiten können sich bei Events, Turnieren oder spontanem Chaos verschieben.</div>
+      <div className={styles.note}>
+        Zeiten können sich bei Events, Turnieren oder spontanem Chaos
+        verschieben.
+      </div>
     </div>
   );
 }
+

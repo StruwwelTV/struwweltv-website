@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "struwweltv",
-  "main": ".open-next/worker.js",
+  "main": "custom-worker.ts",
   "compatibility_date": "2026-08-08",
   "compatibility_flags": [
     "nodejs_compat",
@@ -22,5 +22,9 @@
       "binding": "WORKER_SELF_REFERENCE",
       "service": "struwweltv"
     }
-  ]
+  ],
+  "triggers": {
+    "crons": ["* * * * *"]
+  }
 }
+

@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
-import { readSchedule } from "@/lib/scheduleStore";
+import { readScheduleState } from "@/lib/scheduleStore";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const schedule = await readSchedule();
-  return NextResponse.json({ schedule }, { headers: { "Cache-Control": "no-store" } });
+  const { current } = await readScheduleState();
+  return NextResponse.json(
+    { schedule: current },
+    { headers: { "Cache-Control": "no-store" } },
+  );
 }
+
